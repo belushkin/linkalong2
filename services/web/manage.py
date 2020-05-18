@@ -1,11 +1,6 @@
 from flask.cli import FlaskGroup
 
-# from project import config
-# print(config.ProductionConfig)
-
 from project import app
-
-print(dir())
 
 cli = FlaskGroup(app)
 
