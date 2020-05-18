@@ -1,6 +1,5 @@
 import os
 from flask import Flask, jsonify
-# from .config import DevelopmentConfig
 
 
 app = Flask(__name__)
