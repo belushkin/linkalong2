@@ -1,6 +1,7 @@
 import os
 from flask import Flask, jsonify
 
+import config
 
 app = Flask(__name__)
 app.config.from_object(os.environ['APP_SETTINGS'])
