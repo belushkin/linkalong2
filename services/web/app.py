@@ -1,11 +1,12 @@
 import os
-import config
 
 from flask import Flask, jsonify
+
+import config
 from flask_sqlalchemy import SQLAlchemy
+from models import *
 from rq import Queue
 from rq.job import Job
-
 from worker import conn
 
 app = Flask(__name__)
@@ -16,11 +17,8 @@ db = SQLAlchemy(app)
 
 q = Queue(connection=conn)
 
-from models import *
-
 
 def process_worker(url):
-
     print(url)
     return jsonify(hello="mesama")
 

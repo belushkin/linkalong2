@@ -1,8 +1,8 @@
 from app import db
+from sqlalchemy import Column, ForeignKey, Integer, Table
 from sqlalchemy.dialects.postgresql import JSON
-from sqlalchemy import Table, Column, Integer, ForeignKey
-from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
 
 
 class Text(db.Model):
@@ -31,4 +31,4 @@ class Sentence(db.Model):
         self.sentence = sentence
 
     def __repr__(self):
-        return '<id {}>'.format(self.id)
+        return f'<id {self.id}>'

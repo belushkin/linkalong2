@@ -1,13 +1,13 @@
 import os
-import redis
 
 from flask.cli import FlaskGroup
-from flask_script import Manager
-from flask_migrate import Migrate, MigrateCommand
-from rq import Worker, Queue, Connection
 
+import redis
 from app import app, db
-from models import Text, Sentence
+from flask_migrate import Migrate, MigrateCommand
+from flask_script import Manager
+from models import Sentence, Text
+from rq import Connection, Queue, Worker
 
 cli = FlaskGroup(app)
 
