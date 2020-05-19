@@ -3,6 +3,8 @@ version: '3.0'
 services:
   web:
     build: ./services/web
+    image: web
+    container_name: web
     command: python manage.py run -h 0.0.0.0
     volumes:
       - ./services/web/:/usr/src/app/
@@ -12,6 +14,8 @@ services:
       - ./.env.dev
     depends_on:
       - db
+      - redis
+
   db:
     image: postgres:12-alpine
     volumes:
@@ -20,6 +24,19 @@ services:
       - POSTGRES_USER=flask
       - POSTGRES_PASSWORD=flask
       - POSTGRES_DB=flask_dev
+
+  worker:
+    image: web
+    command: python manage.py run_worker
+    volumes:
+      - ./services/web/:/usr/src/app/
+    env_file:
+      - ./.env.dev
+    depends_on:
+      - redis
+
+  redis:
+      image: redis:5.0.7-alpine
 
 volumes:
   postgres_data:

@@ -45,6 +45,7 @@ function command_boot()
 {
     # Start the developer environment
     docker-compose -f docker-compose.yml up &
+#    docker-compose -f docker-compose.yml up -d
 
     echo -n "Waiting for the services to initialize.. "
     while [[ ! $(docker ps | grep linkalong2_web_1) ]] ; do
