@@ -7,3 +7,6 @@ heroku config --app linkalong-stage
 heroku addons:create heroku-postgresql:hobby-dev --app linkalong-stage
 
 
+heroku run python services/web/manage.py db init --app linkalong-stage
+heroku run python services/web/manage.py db upgrade --app linkalong-stage
+
