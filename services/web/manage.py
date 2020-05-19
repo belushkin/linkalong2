@@ -12,15 +12,13 @@ manager = Manager(app)
 
 manager.add_command('db', MigrateCommand)
 
+# Changing work directory for back compatibility with Heroku
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
 
 @cli.command("db")
 def create_db():
     manager.run()
-
-#     # db.drop_all()
-#     # db.create_all()
-#     # db.session.commit()
 
 
 if __name__ == "__main__":
