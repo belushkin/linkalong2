@@ -19,7 +19,7 @@ services:
   db:
     image: postgres:12-alpine
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
+      - postgres_data:/var/lib/postgresql/nltk_data/
     environment:
       - POSTGRES_USER=flask
       - POSTGRES_PASSWORD=flask

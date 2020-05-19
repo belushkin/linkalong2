@@ -14,37 +14,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 from models import *
-
-
-def process_worker(url):
-
-    print(url)
-    return jsonify(hello="mesama")
-
-
-@app.route("/")
-def hello_world():
-    from app import process_worker
-
-    with Connection(redis.from_url(os.getenv('REDISTOGO_URL', 'redis://redis:6379'))):
-        q = Queue()
-        job = q.enqueue_call(
-            func=process_worker, args=("test",), result_ttl=1000
-        )
-
-    return jsonify(job_id=job.get_id())
-
-
-@app.route("/results/<job_key>", methods=['GET'])
-def get_results(job_key):
-    with Connection(redis.from_url(os.getenv('REDISTOGO_URL', 'redis://redis:6379'))):
-        q = Queue()
-        job = q.fetch_job(job_key)
-
-        if job.is_finished:
-            return str(job.result), 200
-        else:
-            return "Nay!", 202
+from views import hello_world, get_results
 
 
 if __name__ == '__main__':

@@ -3,6 +3,7 @@ FROM python:3.8.1-slim-buster
 
 # create directory for the app user
 RUN mkdir -p /usr/src/app
+RUN mkdir -p /usr/local/share/nltk_data
 
 # create the app user
 RUN addgroup --system user && adduser --system --no-create-home --group user
@@ -26,7 +27,10 @@ RUN pip install -r requirements.txt
 COPY . /usr/src/app/
 
 # chown all the files to the app user
-RUN chown -R user:user /usr/src/app && chmod -R 755 /usr/src/app
+RUN chown -R user:user /usr/src/app && \
+    chmod -R 755 /usr/src/app && \
+    chown -R user:user /usr/local/share/nltk_data
+
 RUN chmod +x /usr/src/app/entrypoint.sh
 
 # change to the app user

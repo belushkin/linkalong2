@@ -18,10 +18,11 @@ heroku addons:create heroku-postgresql:hobby-dev --app linkalong-stage
 heroku run python services/web/manage.py db init --app linkalong-stage
 heroku run python services/web/manage.py db upgrade --app linkalong-stage
 
-heroku logs --tail
+heroku logs --tail --remote stage
 
 For staging: git push stage master
 For production: git push pro master
 
 
 
+docker-compose exec web python -m pytest

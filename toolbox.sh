@@ -8,7 +8,7 @@ fi
 export LINKALONG2_DOCKER_DIR=`pwd`
 export VOLUME_DIR="$LINKALONG2_DOCKER_DIR"
 
-CONTAINER_TOOLBOX_ID=`docker ps --format '{{.ID}}\t{{.Names}}' | grep linkalong2_web_1 | cut -f1`
+CONTAINER_TOOLBOX_ID=`docker ps --format '{{.ID}}\t{{.Names}}' | grep web | cut -f1`
 
 function ssh_to()
 {
@@ -48,14 +48,14 @@ function command_boot()
 #    docker-compose -f docker-compose.yml up -d
 
     echo -n "Waiting for the services to initialize.. "
-    while [[ ! $(docker ps | grep linkalong2_web_1) ]] ; do
+    while [[ ! $(docker ps | grep web) ]] ; do
         echo -n "."
         sleep 1
     done
 }
 
 function command_tests(){
-    echo " ./bin/phpunit tests" |  docker exec -i  linkalong2_web_1 /bin/bash
+    echo " ./bin/phpunit tests" |  docker exec -i  web /bin/bash
 }
 
 function command_rebuild() {
