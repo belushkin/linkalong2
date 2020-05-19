@@ -3,6 +3,12 @@ docker-compose exec web python manage.py db migrate
 docker-compose exec web python manage.py db heads
 docker-compose exec web python manage.py db current
 
+# custom commands
+docker-compose exec web python manage.py seed_db
+
+
+docker-compose exec web python manage.py db revision --autogenerate -m "Added Text and Sentence models"
+
 docker-compose exec db psql --username=flask --dbname=flask_dev
 
 heroku config --app linkalong-stage

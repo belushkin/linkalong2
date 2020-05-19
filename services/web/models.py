@@ -1,19 +1,34 @@
 from app import db
 from sqlalchemy.dialects.postgresql import JSON
+from sqlalchemy import Table, Column, Integer, ForeignKey
+from sqlalchemy.orm import relationship
+from sqlalchemy.ext.declarative import declarative_base
 
 
-class Result(db.Model):
-    __tablename__ = 'results'
+class Text(db.Model):
+    __tablename__ = 'texts'
 
     id = db.Column(db.Integer, primary_key=True)
-    url = db.Column(db.String())
-    result_all = db.Column(JSON)
-    result_no_stop_words = db.Column(JSON)
+    text = db.Column(db.Text())
+    children = relationship("Sentence")
 
-    def __init__(self, url, result_all, result_no_stop_words):
-        self.url = url
-        self.result_all = result_all
-        self.result_no_stop_words = result_no_stop_words
+    def __init__(self, text):
+        self.text = text
+
+    def __repr__(self):
+        return f'<id {self.id}>'
+
+
+class Sentence(db.Model):
+    __tablename__ = 'sentences'
+
+    id = db.Column(db.Integer, primary_key=True)
+    parent_id = Column(Integer, ForeignKey('texts.id'))
+    sentence = db.Column(db.String())
+
+    def __init__(self, parent_id, sentence):
+        self.parent_id = parent_id
+        self.sentence = sentence
 
     def __repr__(self):
         return '<id {}>'.format(self.id)
