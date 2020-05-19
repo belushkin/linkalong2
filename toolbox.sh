@@ -51,9 +51,6 @@ function command_boot()
         echo -n "."
         sleep 1
     done
-    echo ""
-    echo "composer install --prefer-source --no-interaction" |  docker exec -i  linkalong2_web_1 /bin/bash
-    echo ""
 }
 
 function command_tests(){
