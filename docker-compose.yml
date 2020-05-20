@@ -57,7 +57,7 @@ services:
         - './services/client:/usr/src/app'
         - '/usr/src/app/node_modules'
       ports:
-        - 3008:3000
+        - 3000:3000
       environment:
         - NODE_ENV=development
         - REACT_APP_SERVICE_URL=http://localhost:8080
