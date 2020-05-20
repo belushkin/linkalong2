@@ -1,7 +1,5 @@
 import nltk
 
-nltk.download('punkt')
-
 
 def split(text):
     """
@@ -17,6 +15,7 @@ def split(text):
     :param text: String up to 1 mb
     :return: List of strings
     """
+    nltk.data.path.append('./nltk_data/')
     sentences = nltk.tokenize.sent_tokenize(text)
 
     return sentences

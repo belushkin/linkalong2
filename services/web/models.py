@@ -31,4 +31,4 @@ class Sentence(db.Model):
         self.sentence = sentence
 
     def __repr__(self):
-        return f'<id {self.id}>'
+        return f'<id {self.id}, sentence {self.sentence}>'

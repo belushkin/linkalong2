@@ -13,8 +13,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-from models import *
-from views import hello_world, get_results, add_text
+from models import Text, Sentence
+from views import hello_world, get_results, add_text, list_text, list_all_texts
 
 
 if __name__ == '__main__':
