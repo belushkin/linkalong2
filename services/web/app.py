@@ -14,7 +14,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 from models import *
-from views import hello_world, get_results
+from views import hello_world, get_results, add_text
 
 
 if __name__ == '__main__':

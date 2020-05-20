@@ -12,5 +12,6 @@ then
 fi
 
 python manage.py db upgrade
+python manage.py pg_trgm
 
 exec "$@"

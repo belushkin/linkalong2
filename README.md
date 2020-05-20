@@ -9,6 +9,7 @@ docker-compose exec web python manage.py seed_db
 
 docker-compose exec web python manage.py db revision --autogenerate -m "Added Text and Sentence models"
 
+# Connect to the database
 docker-compose exec db psql --username=flask --dbname=flask_dev
 
 heroku config --app linkalong-stage

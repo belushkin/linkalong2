@@ -31,6 +31,12 @@ def seed_db():
     db.session.commit()
 
 
+@cli.command("pg_trgm")
+def seed_db():
+    query = db.text("CREATE EXTENSION pg_trgm;")
+    db.session.execute(query)
+
+
 @cli.command("run_worker")
 def run_worker():
     listen = ['default']
