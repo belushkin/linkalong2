@@ -94,7 +94,7 @@ def list_text(text_id):
     return jsonify(result)
 
 
-@app.route("/list", methods=['GET'])
+@app.route("/api/list", methods=['GET'])
 def list_all_texts():
     """
     Route lists all texts stored in the database

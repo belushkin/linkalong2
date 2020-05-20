@@ -1,4 +1,4 @@
-version: '3.0'
+version: '3.7'
 
 services:
   web:
@@ -6,10 +6,13 @@ services:
     image: web
     container_name: web
     command: python manage.py run -h 0.0.0.0
+#    command: gunicorn --bind 0.0.0.0:5000 manage:app
     volumes:
       - ./services/web/:/usr/src/app/
+#    expose:
+#      - 5000
     ports:
-      - 5000:5000
+      - 5002:5000
     env_file:
       - ./.env.dev
     depends_on:
@@ -36,34 +39,35 @@ services:
       - redis
 
   redis:
-      image: redis:5.0.7-alpine
+    image: redis:5.0.7-alpine
 
   nginx:
-      build:
-        context: ./services/nginx
-        dockerfile: Dockerfile
-      restart: unless-stopped
-      ports:
-        - 8080:8080
-      depends_on:
-        - web
-        - client
+    build:
+      context: ./services/nginx
+      dockerfile: Dockerfile
+    container_name: nginx
+    restart: unless-stopped
+    ports:
+      - 8080:8080
+    depends_on:
+      - web
+      - client
 
   client:
-      build:
-        context: ./services/client
-        dockerfile: Dockerfile
-      volumes:
-        - './services/client:/usr/src/app'
-        - '/usr/src/app/node_modules'
-      ports:
-        - 3000:3000
-      environment:
-        - NODE_ENV=development
-        - REACT_APP_SERVICE_URL=http://localhost:8080
-        - CHOKIDAR_USEPOLLING=true
-      depends_on:
-        - web
+    build:
+      context: ./services/client
+      dockerfile: Dockerfile
+    volumes:
+      - './services/client:/usr/src/app'
+      - '/usr/src/app/node_modules'
+    ports:
+      - 3008:3000
+    environment:
+      - NODE_ENV=development
+      - REACT_APP_SERVICE_URL=http://localhost:8080
+      - CHOKIDAR_USEPOLLING=true
+    depends_on:
+      - web
 
 volumes:
   postgres_data:
