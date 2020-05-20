@@ -3,6 +3,9 @@ docker-compose exec web python manage.py db migrate
 docker-compose exec web python manage.py db heads
 docker-compose exec web python manage.py db current
 
+
+docker-compose exec web python manage.py pg_trgm
+
 # custom commands
 docker-compose exec web python manage.py seed_db
 

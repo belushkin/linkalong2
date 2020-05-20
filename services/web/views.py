@@ -14,7 +14,7 @@ from models import Text, Sentence
 
 @app.route("/")
 def hello_world():
-    with Connection(redis.from_url(os.getenv('REDISTOGO_URL', 'redis://redis:6379'))):
+    with Connection(redis.from_url(os.getenv('REDISTOGO_URL', app.config['REDIS_URL']))):
         q = Queue()
         job = q.enqueue_call(
             func=process_worker, args=("test",), result_ttl=1000
@@ -25,7 +25,7 @@ def hello_world():
 
 @app.route("/results/<job_key>", methods=['GET'])
 def get_results(job_key):
-    with Connection(redis.from_url(os.getenv('REDISTOGO_URL', 'redis://redis:6379'))):
+    with Connection(redis.from_url(os.getenv('REDISTOGO_URL', app.config['REDIS_URL']))):
         q = Queue()
         job = q.fetch_job(job_key)
 
@@ -54,7 +54,7 @@ def add_text():
             db.session.commit()
 
             # Push extraction job to the queue
-            with Connection(redis.from_url(os.getenv('REDISTOGO_URL', 'redis://redis:6379'))):
+            with Connection(redis.from_url(os.getenv('REDISTOGO_URL', app.config['REDIS_URL']))):
                 q = Queue()
                 job = q.enqueue_call(
                     func=process_worker, args=(text.id,), result_ttl=3000
@@ -74,17 +74,16 @@ def list_text(text_id):
     It receives text_id, fetch the database and return JSON of the all sentences in the text
     :param text_id: Int field represents stored text id
     :return:
+    {
+      "id": 1,
+      "sentences": [
         {
           "id": 1,
-          "sentences": [
-            "Hello.",
-            "I am grut.",
-            "No no no.",
-            "Covid-19.",
-            "Covid18"
-          ],
-          "text": "Hello. I am grut. No no no. Covid-19. Covid18"
+          "value": "Hello."
         }
+      ],
+      "text": "Hello. I am grut. No no no. Covidka. Covid20"
+    }
     """
     listed_text = Text.query.filter_by(id=text_id).first()
 
@@ -96,7 +95,7 @@ def list_text(text_id):
     result = {'text': listed_text.text, 'id': listed_text.id, 'sentences': []}
 
     for value in sentences:
-        result['sentences'].append(value.sentence)
+        result['sentences'].append({'value': value.sentence, 'id': value.id})
 
     return jsonify(result)
 
@@ -117,5 +116,35 @@ def list_all_texts():
     texts = Text.query.all()
 
     result = [{'id': value.id, 'text': value.text} for value in texts]
+
+    return jsonify(result)
+
+
+@app.route("/search/<sentence_id>", methods=['GET'])
+def search_similar_texts(sentence_id):
+    """
+    Route search similar texts based on the Trigram (or Trigraph) Concepts
+    :return:
+    [
+      {
+        "sentence_id": 5,
+        "sim": 1.0,
+        "text": "Covid - 19",
+        "text_id": 2
+      }
+    ]
+    """
+
+    original_sentence = Sentence.query.filter_by(id=sentence_id).first()
+    if not original_sentence:
+        raise Exception("There is no such sentence in the database")
+
+    query = db.text(f"select * from (select parent_id, id, sentence, similarity('{original_sentence.sentence}', "
+                    f"sentence) as sim from sentences) as t WHERE sim > 0 order by sim desc;")
+    resultset = db.session.execute(query).fetchall()
+
+    result = []
+    for row in resultset:
+        result.append({'text_id': row[0], 'sentence_id': row[1], 'text': row[2], 'sim': row[3]})
 
     return jsonify(result)
