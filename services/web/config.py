@@ -6,7 +6,7 @@ class Config(object):
     DEBUG = False
     TESTING = False
     CSRF_ENABLED = True
-    SECRET_KEY = 'this-really-needs-to-be-changed'
+    SECRET_KEY = 'ZQbn05PDeA7v11'
     SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
     REDIS_URL = 'redis://redis:6379'
 

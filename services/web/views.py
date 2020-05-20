@@ -12,15 +12,9 @@ from worker import process_worker
 from models import Text, Sentence
 
 
-@app.route("/")
+@app.route("/api")
 def hello_world():
-    with Connection(redis.from_url(os.getenv('REDISTOGO_URL', app.config['REDIS_URL']))):
-        q = Queue()
-        job = q.enqueue_call(
-            func=process_worker, args=("test",), result_ttl=1000
-        )
-
-    return jsonify(job_id=job.get_id())
+    return jsonify(job_id="anasse")
 
 
 @app.route("/results/<job_key>", methods=['GET'])
