@@ -29,6 +29,15 @@ Most similar sentences from different texts come first and less similar sentence
 | Integrate and test app  | -  | -  |
 | **Total**  | **16h**  | **36h**  |
 
+
+### How app does look like
+![alt text](./services/assets/img/image.png)
+
+![alt text](./services/assets/img/image_1.png)
+
+![alt text](./services/assets/img/image_2.png)
+
+
 ### Technical details regarding task for further learning and for fellows who might need such apps
 
 Structure of the application is designed to be able easily be deployed to Heroku from the github. That's why there are 2 
