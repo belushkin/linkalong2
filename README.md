@@ -31,10 +31,13 @@ Most similar sentences from different texts come first and less similar sentence
 
 
 ### How app does look like
+Main page
 ![alt text](./services/assets/img/image.png)
 
+Sentences page
 ![alt text](./services/assets/img/image_1.png)
 
+Search page
 ![alt text](./services/assets/img/image_2.png)
 
 
