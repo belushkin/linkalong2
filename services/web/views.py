@@ -15,7 +15,7 @@ from models import Text, Sentence
 
 @app.route("/api")
 def hello_world():
-    return jsonify(job_id="anasse")
+    return jsonify(job_id="hello world")
 
 
 @app.route("/results/<job_key>", methods=['GET'])
