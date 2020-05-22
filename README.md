@@ -89,39 +89,116 @@ What can be improved:
 - Adding environment variables and moving domain names from the code there
 
 
+### Final words
+In general I enjoyed this task. Most impressive part as for me was Python task especially with Trigram search and UI
+part I found also interesting but less complex.
+
+Thank you for this experience.
+
+
+### Technologies used in the assessment
+- Python 3.8
+- Docker
+- Docker Compose
+- Flask
+- Redis
+- Bash
+- Git
+- TailwindCSS
+- React
+- Next.js
+- Postges SQL
+- Alembic
+- SQL Alchemy
+- RQ
+- Heroku
+- Nginx + gunicorn
+- NodeJS
+
+
+### Prerequisites
+Docker.io and docker-compose must be installed in the system in order to be able to use the app.
+OS Linux
+
+## How to setup the application:
+```bash
+git clone https://github.com/belushkin/linkalong2.git
+cd linkalong2; ./toolbox.sh up
+```
+
+## How to run tests
+```bash
+docker-compose exec web python -m pytest
+```
+
+## URL of the running app
+http://0.0.0.0:8080/
+
+## Basic script usage:
+Application has **toolbox.sh** script. It is very easy run, stop, ssh, rebuild, run tests and stop the application.
+
+```bash
+./toolbox.sh up # run the application
+./toolbox.sh rebuild # rebuild the image
+./toolbox.sh ssh # ssh to the container
+./toolbox.sh tests # run tests (might not be working)
+./toolbox.sh down # stop the application
+```
+
+### Technical help for those who will launch this app
+
+#### Commands for operating database an run cli commands of flask cli
+```bash
 docker-compose exec web python manage.py db init
 docker-compose exec web python manage.py db migrate
 docker-compose exec web python manage.py db heads
 docker-compose exec web python manage.py db current
-
-
 docker-compose exec web python manage.py pg_trgm
-
-# custom commands
 docker-compose exec web python manage.py seed_db
+```
 
-
+#### Alembic
+```bash
 docker-compose exec web python manage.py db revision --autogenerate -m "Added Text and Sentence models"
+```
 
-# Connect to the database
+#### Postgres
+```bash
 docker-compose exec db psql --username=flask --dbname=flask_dev
+```
 
+#### Heroku
+```bash
 heroku config --app linkalong-stage
 heroku addons:create heroku-postgresql:hobby-dev --app linkalong-stage
-
-
 heroku run python services/web/manage.py db init --app linkalong-stage
 heroku run python services/web/manage.py db upgrade --app linkalong-stage
-
 heroku logs --tail --remote stage
+```
 
+#### Heroku git
+```bash
 For staging: git push stage master
 For production: git push pro master
+```
 
-
-
+#### Tests
+```bash
 docker-compose exec web python -m pytest
+```
 
+#### Next.js
+```bash
 npx tailwind init
+```
 
+#### Docker
+```bash
 docker exec -it 1f90af2b50e8 /bin/sh
+```
+
+## Contributors
+@belushkin
+
+## License
+MIT License
