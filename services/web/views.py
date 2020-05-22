@@ -29,7 +29,7 @@ def get_results(job_key):
             return "Nay!", 202
 
 
-@app.route("/text", methods=['POST'])
+@app.route("/api/text", methods=['POST'])
 def add_text():
     """
     Route for adding new texts to the database
@@ -61,7 +61,7 @@ def add_text():
         raise Exception("Please add content-type application/json to the request")
 
 
-@app.route("/list/<text_id>", methods=['GET'])
+@app.route("/api/list/<text_id>", methods=['GET'])
 def list_text(text_id):
     """
     Method for getting all stored sentences of the stored text
@@ -114,7 +114,7 @@ def list_all_texts():
     return jsonify(result)
 
 
-@app.route("/search/<sentence_id>", methods=['GET'])
+@app.route("/api/search/<sentence_id>", methods=['GET'])
 def search_similar_texts(sentence_id):
     """
     Route search similar texts based on the Trigram (or Trigraph) Concepts
