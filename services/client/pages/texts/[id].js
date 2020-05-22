@@ -16,11 +16,9 @@ export default function Text({ textData }) {
       <Head>
         <title>{siteTitle}</title>
       </Head>
-      <section className={utilStyles.headingMd}>…</section>
-        <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
-            <h2 className={utilStyles.headingLg}>Blog</h2>
+      <section className={utilStyles.headingMd}>List of sentences</section>
+        <section className={`${utilStyles.headingMd} ${utilStyles.padding1px} mt-8`}>
             <ul className={utilStyles.list}>
-
                 {textData.sentences.map(({ id, value }) => (
                     <li className={utilStyles.listItem} key={id}>
                         <Link href="/sentences/[id]" as={`/sentences/${id}`}>

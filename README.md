@@ -30,3 +30,7 @@ For production: git push pro master
 
 
 docker-compose exec web python -m pytest
+
+npx tailwind init
+
+docker exec -it 1f90af2b50e8 /bin/sh

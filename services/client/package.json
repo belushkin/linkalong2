@@ -10,8 +10,9 @@
     "run-docker": "docker run --rm -it -p 3000:3000 next-app"
   },
   "dependencies": {
-    "fs": "0.0.1-security",
-    "gray-matter": "^4.0.2",
+    "formik": "latest",
+    "tailwindcss": "latest",
+    "postcss-preset-env": "latest",
     "next": "latest",
     "react": "^16.7.0",
     "react-dom": "^16.7.0"

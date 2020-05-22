@@ -6,6 +6,7 @@ from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from rq import Worker, Queue, Connection
 from rq.job import Job
+from sqlalchemy import desc
 
 from app import app, db
 from worker import process_worker
@@ -54,7 +55,7 @@ def add_text():
                     func=process_worker, args=(text.id,), result_ttl=3000
                 )
 
-            return jsonify(text=text.id)
+            return jsonify(id=text.id, text=text.text)
         else:
             raise Exception("Please add text variable to the json")
     else:
@@ -107,9 +108,9 @@ def list_all_texts():
     ]
     """
 
-    texts = Text.query.all()
+    texts = Text.query.order_by(desc("id")).all()
 
-    result = [{'id': value.id, 'text': value.text} for value in texts]
+    result = [{'id': value.id, 'text': value.text[:100]} for value in texts]
 
     return jsonify(result)
 
@@ -119,14 +120,21 @@ def search_similar_texts(sentence_id):
     """
     Route search similar texts based on the Trigram (or Trigraph) Concepts
     :return:
-    [
-      {
-        "sentence_id": 5,
-        "sim": 1.0,
-        "text": "Covid - 19",
-        "text_id": 2
-      }
-    ]
+    {
+      "original": {
+        "id": 5,
+        "text_id": 2,
+        "value": "Covid - 19"
+      },
+      "search_result": [
+        {
+          "sentence_id": 5,
+          "sim": 1.0,
+          "text": "Covid - 19",
+          "text_id": 2
+        }
+      ]
+    }
     """
 
     original_sentence = Sentence.query.filter_by(id=sentence_id).first()
@@ -137,8 +145,13 @@ def search_similar_texts(sentence_id):
                     f"sentence) as sim from sentences) as t WHERE sim > 0 order by sim desc;")
     resultset = db.session.execute(query).fetchall()
 
-    result = []
+    result = {'original': {}, 'search_result': []}
+
+    result['original']['id'] = original_sentence.id
+    result['original']['text_id'] = original_sentence.parent_id
+    result['original']['value'] = original_sentence.sentence
+
     for row in resultset:
-        result.append({'text_id': row[0], 'sentence_id': row[1], 'text': row[2], 'sim': row[3]})
+        result['search_result'].append({'text_id': row[0], 'sentence_id': row[1], 'text': row[2], 'sim': row[3]})
 
     return jsonify(result)

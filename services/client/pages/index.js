@@ -1,35 +1,73 @@
 import Head from 'next/head'
 import Link from 'next/link'
 import Layout, { siteTitle } from '../components/layout'
+import CreateForm from '../components/form'
 import utilStyles from '../styles/utils.module.css'
 
-export default function Home({ data }) {
+import React from 'react';
 
-  return (
-    <Layout home>
-      <Head>
-        <title>{siteTitle}</title>
-      </Head>
-      <section className={utilStyles.headingMd}>…</section>
-        <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
-            <h2 className={utilStyles.headingLg}>Blog</h2>
-            <ul className={utilStyles.list}>
-                {data.map(({ id, text }) => (
-                    <li className={utilStyles.listItem} key={id}>
-                        <Link href="/texts/[id]" as={`/texts/${id}`}>
-                            <a>{text}</a>
-                        </Link>
-                    </li>
-                ))}
-            </ul>
-        </section>
-    </Layout>
-  )
-}
+import Links from '../components/links'
 
-export async function getServerSideProps() {
-  const res = await fetch(`http://nginx:8080/api/list`)
-  const data = await res.json()
+export default class Home extends React.Component {
 
-  return { props: { data } }
+    constructor(props) {
+        super(props);
+        this.state = {
+            links: []
+        };
+
+        this.handleTextAdd = this.handleTextAdd.bind(this);
+    }
+
+    async componentDidMount() {
+        const res = await fetch(`http://0.0.0.0:8080/api/list`)
+        const data = await res.json()
+        this.setState({ links: data })
+    }
+
+    handleTextAdd(text) {
+
+        if (!text)
+            return
+
+        fetch(`http://0.0.0.0:8080/api/text`, {
+            method: 'POST',
+            body: JSON.stringify({'text':text}),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(res => res.json())
+        .then(data => {
+                this.setState(prevState => {
+                    const newLinks = [data, ...prevState.links];
+
+                    return {
+                        links: newLinks
+                    }
+                });
+        })
+        .catch(err => console.error("Error:", err));
+    }
+
+    render() {
+        return (
+            <Layout home>
+                <Head>
+                    <title>{siteTitle}</title>
+                </Head>
+                <CreateForm
+                    {...this.props}
+                    {...this.state}
+                    onAddLink={this.handleTextAdd}
+                />
+                <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
+                    <h2 className={`${utilStyles.headingLg} mt-10`}>Added texts</h2>
+                    <Links
+                        {...this.props}
+                        {...this.state}
+                    />
+                </section>
+            </Layout>
+        )
+    }
 }

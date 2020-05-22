@@ -16,17 +16,17 @@ export default function Sentence({ sentenceData }) {
       <Head>
         <title>{siteTitle}</title>
       </Head>
-      <section className={utilStyles.headingMd}>…</section>
+      <section className={`${utilStyles.headingMd}`}>Original sentence:</section>
         <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
-            <h2 className={utilStyles.headingLg}>Blog</h2>
-            <ul className={utilStyles.list}>
+            <h2 className={utilStyles.headingLg}>{sentenceData.original.value}</h2>
 
-                {sentenceData.map(({ sentence_id, sim, text, text_id }) => (
-                    <li className={utilStyles.listItem} key={id}>
-                        <Link href="/sentences/[id]" as={`/sentences/${sentence_id}`}>
+            <ul className={`${utilStyles.list} mt-10`}>
+                {sentenceData.search_result.map(({ sentence_id, sim, text, text_id }) => (
+                    <li className={utilStyles.listItem} key={sentence_id}>
+                        <Link href="/texts/[id]" as={`/texts/${text_id}`}>
                             <a>{text}</a>
                         </Link>
-                        <span>{sim}</span>
+                        <span className={`ml-4`}>{sim}</span>
                     </li>
                 ))}
             </ul>
